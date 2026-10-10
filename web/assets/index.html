@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Playfielder · 游局创作室</title>
+  <link rel="stylesheet" href="/static/studio.css">
+  <script type="module" src="/static/studio.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Playfielder 首页"><span class="brand-mark">p<span>f</span></span><span>PLAYFIELDER<small>GO EDITION · 游局创作室</small></span></a>
+    <div class="top-status"><span class="status-dot"></span><span id="model-status">正在连接创作室</span><span class="edition">独立本地版</span></div>
+  </header>
+  <main id="library" class="library">
+    <section class="library-intro"><p class="eyebrow">A PLACE FOR STORIES THAT CAN BE PLAYED</p><h1>把一段故事，<br>变成一场<span>调查。</span></h1><p class="lede">写下线索，搭建网页，让玩家走进你创造的世界。<br>作品留在你的电脑，也可以导出，带到别处。</p><div class="actions"><button class="primary" id="new-project">＋ 开始创作</button><button id="import-project">导入作品</button></div></section>
+    <section class="project-section"><div class="section-heading"><h2>你的作品 <span id="project-count">0</span></h2><p>从一个想法开始，也从上一次继续。</p></div><div id="project-list" class="project-list"></div></section>
+    <aside class="library-foot"><span>01 / 写下故事</span><span>02 / 编排线索</span><span>03 / 试玩与导出</span><span class="foot-note">Go 引擎 · 离线作品 · 自主保存</span></aside>
+  </main>
+  <main id="workspace" class="workspace" hidden>
+    <aside class="sidebar">
+      <div class="sidebar-head"><button id="back-library" class="text-button">← 作品库</button><span id="save-status" role="status">已保存</span></div>
+      <label class="title-label">作品名称<input id="project-title" maxlength="80" aria-label="作品名称"></label>
+      <nav class="tabs" aria-label="创作工具"><button id="tab-assistant" class="tab active">创作助手</button><button id="tab-source" class="tab">作品代码</button><button id="tab-story" class="tab">剧情来信</button></nav>
+      <section id="panel-assistant" class="tool-panel">
+        <p class="panel-kicker">从一句话，到可玩的故事。</p><p class="muted">描述你想创作的场景，或指出需要修改的地方。助手会生成新的作品版本，原有版本仍可恢复。</p>
+        <label>你的想法<textarea id="ai-prompt" rows="6" placeholder="例如：做一个复古档案馆。玩家需要从三封信里找出失踪者的去向。" maxlength="24000"></textarea></label>
+        <div class="actions"><button id="generate" class="primary">开始创作</button><button id="cancel-task" hidden>停止</button></div>
+        <p id="ai-notice" class="muted"></p><div id="task-card" class="task-card" hidden><strong id="task-state"></strong><p id="task-usage"></p><pre id="task-output"></pre><button id="resume-task" hidden>继续这个任务</button></div>
+        <div class="divider"></div><div class="section-heading compact"><h3>版本记录</h3><button id="snapshot" class="text-button">＋ 保存版本</button></div><div id="version-list"></div>
+      </section>
+      <section id="panel-source" class="tool-panel" hidden><p class="muted">修改代码后自动保存。使用 asset://素材ID 引用已上传素材。</p><label>HTML<textarea id="source-html" class="code" rows="10" spellcheck="false"></textarea></label><label>CSS<textarea id="source-css" class="code" rows="7" spellcheck="false"></textarea></label><label>JavaScript<textarea id="source-js" class="code" rows="7" spellcheck="false"></textarea></label></section>
+      <section id="panel-story" class="tool-panel" hidden><p class="muted">来信由 Go 剧情引擎驱动。start 表示开场事件；网页可通过 data-story-event 触发其他事件。</p><div class="actions"><button id="add-character">＋ 角色</button><button id="add-node">＋ 来信</button></div><div id="story-cards"></div><details><summary>完整剧情数据</summary><label>剧情 JSON<textarea id="source-story" class="code" rows="14" spellcheck="false"></textarea></label></details><button id="reset-play" class="text-button">重置本次试玩进度</button></section>
+    </aside>
+    <section class="preview-column">
+      <div class="preview-toolbar"><div class="actions"><button id="mode-edit" class="mode active">编辑</button><button id="mode-play" class="mode">试玩</button><span class="toolbar-separator"></span><button id="undo" aria-label="撤销">↶</button><button id="redo" aria-label="重做">↷</button></div><div class="actions"><button id="mobile-preview">手机尺寸</button><button id="export-package">导出作品包</button><button id="publish" class="primary">生成本地试玩链接</button></div></div>
+      <div id="preview-caption" class="preview-caption"><span>点击作品中的文字或图片，直接编辑。</span><button id="refresh-preview" class="text-button">刷新预览</button></div>
+      <div class="preview-stage" id="preview-stage"><iframe id="preview-frame" title="作品预览" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe><div id="preview-loading" class="preview-loading">正在准备作品…</div></div>
+      <section id="inspector" class="inspector" hidden><div class="inspector-title"><strong id="selection-label">选中元素</strong><button id="close-inspector" class="text-button">收起</button></div><div id="text-inspector"><label>页面文字<textarea id="selection-text" rows="2" maxlength="24000"></textarea></label><button id="apply-text" class="primary">更新文字</button></div><div id="image-inspector" hidden><label>使用素材<select id="asset-select"></select></label><button id="apply-image" class="primary">替换图片</button></div><button id="upload-asset">＋ 上传素材</button></section>
+    </section>
+  </main>
+  <div id="message" class="message" role="alert" hidden><span id="message-text"></span><button id="dismiss-message" aria-label="关闭提示">×</button></div>
+  <dialog id="new-dialog"><form id="new-form"><p class="eyebrow">YOUR NEXT INVESTIGATION</p><h2>开始一个新故事</h2><label>作品名称<input id="new-title" placeholder="给你的故事起个名字" maxlength="80" required></label><label>起步模板<select id="new-template"><option value="archive">档案馆调查 · 完整短示例</option><option value="blank">空白故事</option></select></label><div class="actions"><button type="button" id="close-new">取消</button><button class="primary" type="submit">创建作品</button></div></form></dialog>
+  <input id="import-file" type="file" accept=".zip,.json,.html" hidden><input id="asset-file" type="file" accept="image/png,image/jpeg,image/gif,image/webp,audio/*,video/mp4,video/webm" hidden>
+</body>
+</html>

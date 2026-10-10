@@ -1,0 +1,12 @@
+/data/
+/bin/
+/dist/
+/.tools/
+/.env
+/.env.*
+!/.env.example
+*.db
+*.db.lock
+*.log
+coverage.out
+.DS_Store
